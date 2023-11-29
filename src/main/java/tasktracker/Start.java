@@ -1,22 +1,36 @@
 package tasktracker;
 
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.InputMismatchException;
 
 public class Start implements Command{
 
     @Override
-    public void run(String[] args) throws IOException {
-        System.out.println(args.length);
-        if (args.length > 2) {
-            System.out.println("Usage: java TM.java start <task name>");
-            throw new InputMismatchException("Too many arguments");
-        }
-        FileWriter logWriter = getLogWriter();
-        String time = getTime();
-        String taskToLog = "start %" ;
-        logWriter.write(taskToLog);
+    public void writeCommandToLog(String[] args) throws IOException{
+        String taskname = args[1];
+        writeStartTimeToLog(taskname);   
+    }
+
+    @Override
+    public void checkForErrors(String[] args) {
+        checkForValidNumberOfArguments(args);
+        ensureNoOtherTasksAreRunning();
     }
     
+    private void writeStartTimeToLog(String taskname) throws IOException {
+        String time = getTimeString();
+        String taskToLog = String.format("%s start %s\n", time, taskname);
+        writeToLog(taskToLog);
+    }
+
+    private void ensureNoOtherTasksAreRunning() {
+        return; //TODO implement this function after tasks analysis is
+    }
+
+    private void checkForValidNumberOfArguments(String[] args) {
+        if(args.length != 2) {
+            System.out.println("Usage: java TM.java start <task name>");
+            throw new IllegalArgumentException();
+        }
+    }
+
 }
