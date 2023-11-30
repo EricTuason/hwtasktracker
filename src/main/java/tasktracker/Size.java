@@ -9,11 +9,6 @@ public class Size implements Command{
     public void writeCommandToLog(String[] args) throws IOException {
         String taskname = args[1];
         String size = args[2];
-        writeSizeToLog(taskname, size); 
-    }
-
-    private void writeSizeToLog(String taskname, String size)
-                                                throws IOException {
         String time = getTimeString();
         String taskToLog = String.format("%s size %s %s\n", 
                                         time, taskname, size);

@@ -7,19 +7,15 @@ public class Stop implements Command{
     @Override
     public void writeCommandToLog(String[] args) throws IOException{
         String taskname = args[1];
-        writeStopTimeToLog(taskname);   
+        String time = getTimeString();
+        String taskToLog = String.format("%s stop %s\n", time, taskname);
+        writeToLog(taskToLog);
     }
 
     @Override
     public void checkForErrors(String[] args) {
         checkForValidNumberOfArguments(args);
         ensureTaskExistsAndWasStarted();
-    }
-    
-    private void writeStopTimeToLog(String taskname) throws IOException {
-        String time = getTimeString();
-        String taskToLog = String.format("%s stop %s\n", time, taskname);
-        writeToLog(taskToLog);
     }
 
     private void ensureTaskExistsAndWasStarted() {

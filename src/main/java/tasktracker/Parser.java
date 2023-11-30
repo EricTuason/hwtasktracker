@@ -8,7 +8,10 @@ public class Parser {
     new ArrayList<String>(Arrays.asList(
         "start",
         "stop",
-        "size"
+        "size",
+        "rename",
+        "delete",
+        "describe"
         ));
 
     public static Command getCommand(String[] commandToCheck) 
@@ -23,6 +26,9 @@ public class Parser {
         if(commandName.equals("start")) {return new Start();}
         if(commandName.equals("stop")) {return new Stop();}
         if(commandName.equals("size")) {return new Size();}
+        if(commandName.equals("rename")) {return new Rename();}
+        if(commandName.equals("delete")) {return new Delete();}
+        if(commandName.equals("describe")) {return new Describe();}
         throw new IllegalArgumentException("Uknown command");
     }
 
