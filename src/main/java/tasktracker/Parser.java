@@ -15,9 +15,15 @@ public class Parser {
                         throws IllegalArgumentException {
         checkInputForNull(commandToCheck);
         checkForValidCommand(commandToCheck[0]);
-        
-        Command command = new Start();
+        Command command = getCommandInstance(commandToCheck[0]);
         return command;
+    }
+
+    private static Command getCommandInstance(String commandName) {
+        if(commandName.equals("start")) {return new Start();}
+        if(commandName.equals("stop")) {return new Stop();}
+        if(commandName.equals("size")) {return new Size();}
+        throw new IllegalArgumentException("Uknown command");
     }
 
     private static void checkForValidCommand(String command) {
