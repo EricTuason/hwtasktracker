@@ -23,8 +23,8 @@ public class Describe implements Command{
                                                throws IOException {
         String time = getTimeString();
         String taskToLog = String.format(
-            "%s describeSize %s %s size %s\n", 
-            time, taskname, description, size);
+            "%s describeSize %s %s %s\n", 
+            time, taskname, size, description);
         writeToLog(taskToLog);
     }
 

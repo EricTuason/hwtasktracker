@@ -18,9 +18,14 @@ public class Rename implements Command{
     public void checkForErrors(String[] args) {
         checkForValidNumberOfArguments(args);
         checkTaskExists();
+        checkNewTaskNameIsAvailable();
     }
     
-   private void checkTaskExists() {
+    private void checkNewTaskNameIsAvailable() {
+        return; //TODO implement after task stuff
+    }
+
+private void checkTaskExists() {
         return; //TODO implement after doing task stuff
     }
 
