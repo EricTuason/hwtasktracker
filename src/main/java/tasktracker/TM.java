@@ -1,6 +1,9 @@
 package tasktracker;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 public class TM 
 {
@@ -9,12 +12,29 @@ public class TM
         try {
             Command command = Parser.getCommand(args);
             //TODO run to get objects from log
-            ArrayList<Task> tasks = Task.createTasksFromLog();
+            ArrayList<Task> tasks = createTasksFromLog();
             command.checkForErrors(args);
             command.writeCommandToLog(args);
         } catch (Exception e) {
             System.out.println(e);
         }
         
+    }
+
+    public static ArrayList<Task> createTasksFromLog() {
+        ArrayList<Task> tasks = new ArrayList<Task>();
+        try (Stream<String> stream = 
+                            Files.lines(Paths.get("tasktracker.log"))) {
+            stream.forEach(s -> TM.performLogCommand(s,tasks)); 
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return tasks;
+    }
+
+    private static void performLogCommand(String s, ArrayList<Task> tasks) {
+        Command logCommand = Parser.getCommandFromLog(s);
+        logCommand.alterTasks(s, tasks);
+        return;
     }
 }

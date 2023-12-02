@@ -47,4 +47,11 @@ public class Parser {
             throw new IllegalArgumentException();
         }
     }
+
+    public static Command getCommandFromLog(String s) {
+        String[] tokenized = s.split(" ");
+        String commandName = tokenized[1];
+        System.out.println(commandName);
+        return getCommandInstance(commandName);
+    }
 }
