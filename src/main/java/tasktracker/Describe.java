@@ -89,6 +89,7 @@ public class Describe implements Command{
     public void performCommand(String[] args, ArrayList<Task> tasks) {
         String name = args[1];
         String description = args[2];
+        createTaskIfNonexistent(name, tasks);
         Task task = getTaskByName(name, tasks);
         task.addToDescription(description);
         if(args.length==4) {
