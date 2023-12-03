@@ -29,7 +29,6 @@ public class Parser {
         if(commandName.equals("rename")) {return new Rename();}
         if(commandName.equals("delete")) {return new Delete();}
         if(commandName.equals("describe")) {return new Describe();}
-        if(commandName.equals("describeSize")) {return new Describe();}
         throw new IllegalArgumentException("Uknown command");
     }
 

@@ -46,4 +46,10 @@ public interface Command {
         }
         return false;
     }
+
+    default void createTaskIfNonexistent(String name,ArrayList<Task> tasks) {
+        if(!doesTaskExist(name, tasks)) {
+            tasks.add(new Task(name));
+        }
+    }
 }

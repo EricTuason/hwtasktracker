@@ -23,7 +23,7 @@ public class Describe implements Command{
                                                throws IOException {
         String time = getTimeString();
         String taskToLog = String.format(
-            "%s describeSize %s %s \"%s\"\n", 
+            "%s describe %s %s \"%s\"\n", 
             time, taskname, size, description);
         writeToLog(taskToLog);
     }
@@ -39,23 +39,23 @@ public class Describe implements Command{
     }
 
     @Override
-    public void checkForErrors(String[] args) {
+    public void checkForParseErrors(String[] args) {
         checkForValidNumberOfArguments(args);
-        checkForAppropriateSize(args);
-    }
-
-    private void checkForAppropriateSize(String[] args) {
         if(args.length == 4) {
             String size = args[3];
-            ArrayList<String> accepetedSizes = SizeEnum.nameString();
-            if(!accepetedSizes.contains(size))
-            {
-                System.out.println(
-                    "Error: illegal size\n" +
-                    "Usage: java TM.java describe " +
-                    "<task name> <description> [{S|M|L|XL}]");
-                throw new IllegalArgumentException();
-            }
+            checkForAllowedSize(size);
+        }
+    }
+
+    private void checkForAllowedSize(String size) {
+        ArrayList<String> accepetedSizes = SizeEnum.nameString();
+        if(!accepetedSizes.contains(size))
+        {
+            System.out.println(
+                "Error: illegal size\n" +
+                "Usage: java TM.java describe " +
+                "<task name> <description> [{S|M|L|XL}]");
+            throw new IllegalArgumentException();
         }
     }
 
@@ -66,6 +66,34 @@ public class Describe implements Command{
                 "Usage: java TM.java describe " +
                 "<task name> <description> [{S|M|L|XL}]");
             throw new IllegalArgumentException();
+        }
+    }
+
+    @Override
+    public void alterTasks(String logLine, ArrayList<Task> tasks) { //TODO refactor this method 
+        String[] t = logLine.split("\"");
+        String description = t[1];
+        String[] ti = t[0].split(" ");
+        String name = ti[2];
+        createTaskIfNonexistent(name, tasks);
+        Task taskToDescribe = getTaskByName(name, tasks);
+        taskToDescribe.addToDescription(description);
+        if(ti.length == 4) {
+            String size = ti[3];
+            checkForAllowedSize(size);
+            taskToDescribe.setSize(SizeEnum.valueOf(size));
+        }
+    }
+
+    @Override
+    public void performCommand(String[] args, ArrayList<Task> tasks) {
+        String name = args[1];
+        String description = args[2];
+        Task task = getTaskByName(name, tasks);
+        task.addToDescription(description);
+        if(args.length==4) {
+            String size = args[3];
+            task.setSize(SizeEnum.valueOf(size));
         }
     }
 }

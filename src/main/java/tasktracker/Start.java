@@ -49,14 +49,9 @@ public class Start implements Command{
 
     private void startTask(
             String name, LocalDateTime startTime, ArrayList<Task> tasks) {
-        if(doesTaskExist(name, tasks)) {
-            Task task = getTaskByName(name, tasks);
-            task.start(startTime);
-        } else {
-            Task task = new Task(name);
-            task.start(startTime);
-            tasks.add(task);
-        }
+        createTaskIfNonexistent(name, tasks);
+        Task task = getTaskByName(name, tasks);
+        task.start(startTime);
     }
 
     @Override

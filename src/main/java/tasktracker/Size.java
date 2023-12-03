@@ -53,9 +53,7 @@ public class Size implements Command{
 
     private void sizeTask(String name, String size, ArrayList<Task> tasks) {
         checkForAllowedSize(size);
-        if(!doesTaskExist(name, tasks)) {
-            tasks.add(new Task(name));
-        }
+        createTaskIfNonexistent(name, tasks);
         Task task = getTaskByName(name,tasks);
         task.setSize(SizeEnum.valueOf(size));
     }
@@ -64,11 +62,6 @@ public class Size implements Command{
     public void performCommand(String[] args, ArrayList<Task> tasks) {
         String name = args[1];
         String size = args[2];
-        checkForAllowedSize(size);
-        if(!doesTaskExist(name, tasks)) {
-            tasks.add(new Task(name));
-        }
-        Task task = getTaskByName(name,tasks);
-        task.setSize(SizeEnum.valueOf(size));
+        sizeTask(name, size, tasks);
     }
 }
