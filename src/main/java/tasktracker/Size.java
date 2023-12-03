@@ -1,6 +1,7 @@
 package tasktracker;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Size implements Command{
@@ -26,9 +27,10 @@ public class Size implements Command{
         ArrayList<String> accepetedSizes = SizeEnum.nameString();
         if(!accepetedSizes.contains(size))
         {
-            System.out.println(
-                "Error: illegal size\n" +
-                "Usage: java TM.java size <task name> {S|M|L|XL}");
+            System.out.printf(
+                "Error: illegal size %s\n" +
+                "Usage: java TM.java size <task name> {S|M|L|XL}",
+                size);
             throw new IllegalArgumentException();
         }
     }
@@ -44,14 +46,22 @@ public class Size implements Command{
 
     @Override
     public void alterTasks(String logLine, ArrayList<Task> tasks) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'alterTasks'");
+        String[] tokenizedByStart = logLine.split(" ");
+        String name = tokenizedByStart[2];
+        String size = tokenizedByStart[3];
+        sizeTask(name, size, tasks);
+    }
+
+    private void sizeTask(String name, String size, ArrayList<Task> tasks) {
+        checkForAllowedSize(size);
+        Task task = getTaskByName(name,tasks);
+        task.setSize(SizeEnum.valueOf(size));
     }
 
     @Override
     public void performCommand(String[] args, ArrayList<Task> tasks) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'performCommand'");
+        return;
+        
     }
     
 }
