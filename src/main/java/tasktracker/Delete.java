@@ -1,6 +1,7 @@
 package tasktracker;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Delete implements Command{
 
@@ -13,9 +14,8 @@ public class Delete implements Command{
     }
 
     @Override
-    public void checkForErrors(String[] args) {
+    public void checkForParseErrors(String[] args) {
         checkForValidNumberOfArguments(args);
-        ensureTaskExists();
     }
     
     private void checkForValidNumberOfArguments(String[] args){
@@ -25,7 +25,18 @@ public class Delete implements Command{
         }
     }
 
-    private void ensureTaskExists() {
-        return; //TODO implent after task
+    @Override
+    public void alterTasks(String logLine, ArrayList<Task> tasks) {
+        String[] tokenizedByDelete = logLine.split(" ");
+        String name = tokenizedByDelete[2];
+        Task taskToDelete = getTaskByName(name, tasks);
+        tasks.remove(taskToDelete);
+    }
+
+    @Override
+    public void performCommand(String[] args, ArrayList<Task> tasks) {
+        String name = args[1];
+        Task taskToDelete = getTaskByName(name, tasks);
+        tasks.remove(taskToDelete);
     }
 }
