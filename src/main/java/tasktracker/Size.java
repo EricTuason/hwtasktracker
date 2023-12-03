@@ -16,13 +16,13 @@ public class Size implements Command{
     }
 
     @Override
-    public void checkForErrors(String[] args) {
+    public void checkForParseErrors(String[] args) {
         checkForValidNumberOfArguments(args);
-        checkForAllowedSize(args);
+        String size = args[2];
+        checkForAllowedSize(size);
     }
 
-    private void checkForAllowedSize(String[] args) {
-        String size = args[2];
+    private void checkForAllowedSize(String size) {
         ArrayList<String> accepetedSizes = SizeEnum.nameString();
         if(!accepetedSizes.contains(size))
         {
@@ -40,6 +40,18 @@ public class Size implements Command{
                 "Usage: java TM.java size <task name> {S|M|L|XL}");
             throw new IllegalArgumentException();
         }
+    }
+
+    @Override
+    public void alterTasks(String logLine, ArrayList<Task> tasks) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'alterTasks'");
+    }
+
+    @Override
+    public void performCommand(String[] args, ArrayList<Task> tasks) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'performCommand'");
     }
     
 }

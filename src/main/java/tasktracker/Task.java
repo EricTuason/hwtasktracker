@@ -1,13 +1,10 @@
 package tasktracker;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 public class Task {
 // TODO mention only size and startTime needs to be optional since all others are just empty 
@@ -24,6 +21,10 @@ public class Task {
         this.mostRecentStartTime = Optional.empty();
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void start(LocalDateTime t) {
         mostRecentStartTime = Optional.of(t);
     }
@@ -32,7 +33,7 @@ public class Task {
         Duration runTime = Duration.between(mostRecentStartTime.get(), t);
         if(runTime.isNegative()) {
             System.out.printf(
-                "Error: End time %s is before start time %s for task %s", 
+                "Error: End time %s is before start time %s for task %s\n", 
                 mostRecentStartTime.toString() , t.toString(), name);
         }
         runTimes.add(runTime);
@@ -86,5 +87,12 @@ public class Task {
         Duration total = getTotalTime();
         Duration average = total.dividedBy(runTimes.size()); 
         return average;
+    }
+
+    public Boolean isRunning() {
+        if(mostRecentStartTime.isPresent()) {
+            return true;
+        }
+        return false;
     }
 }

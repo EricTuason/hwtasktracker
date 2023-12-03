@@ -11,12 +11,12 @@ public class TM
     {
         try {
             Command command = Parser.getCommand(args);
-            //TODO run to get objects from log
+            command.checkForParseErrors(args);
             ArrayList<Task> tasks = createTasksFromLog();
-            command.checkForErrors(args);
+            command.performCommand(args,tasks);
             command.writeCommandToLog(args);
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e); //TODO remove this
         }
         
     }
@@ -35,6 +35,5 @@ public class TM
     private static void performLogCommand(String s, ArrayList<Task> tasks) {
         Command logCommand = Parser.getCommandFromLog(s);
         logCommand.alterTasks(s, tasks);
-        return;
     }
 }
