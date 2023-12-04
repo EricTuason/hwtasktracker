@@ -28,7 +28,7 @@ public class Size implements Command{
         {
             System.out.printf(
                 "Error: illegal size %s\n" +
-                "Usage: java TM.java size <task name> {S|M|L|XL}",
+                "Usage: java TM.java size <task name> {S|M|L|XL}\n",
                 size);
             throw new IllegalArgumentException();
         }

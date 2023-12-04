@@ -24,6 +24,7 @@ public class Parser {
     }
 
     private static Command getCommandInstance(String commandName) {
+        checkForValidCommand(commandName);
         if(commandName.equals("start")) {return new Start();}
         if(commandName.equals("stop")) {return new Stop();}
         if(commandName.equals("size")) {return new Size();}
@@ -31,12 +32,13 @@ public class Parser {
         if(commandName.equals("delete")) {return new Delete();}
         if(commandName.equals("describe")) {return new Describe();}
         if(commandName.equals("summary")) {return new Summary();}
-        throw new IllegalArgumentException("Uknown command");
+        throw new IllegalArgumentException();
     }
 
     private static void checkForValidCommand(String command) {
         if(!possibleCommands.contains(command)) {
-            System.out.println("Illegal Command: Possible Commands:");
+            System.out.printf("Illegal Command: %s Possible Commands: ", 
+                                                command);
             System.out.println(String.join(", ",possibleCommands));
             throw new IllegalArgumentException();
         }
