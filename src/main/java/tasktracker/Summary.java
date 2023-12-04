@@ -58,28 +58,22 @@ public class Summary implements Command{
 
     private void printMinTaskTime(ArrayList<Task> tasks) {
         Duration minTime = tasks.get(0).getTotalTime();
-        Task minTask = tasks.get(0);
         for(Task t: tasks) {
             if(t.getTotalTime().compareTo(minTime) < 0) {
                 minTime = t.getTotalTime();
-                minTask = t;
             }
         }
-        System.out.printf("Minimum Time: %s from task: %s\n", 
-                                formatDuration(minTime), minTask.getName());
+        System.out.printf("Minimum Time: %s\n", formatDuration(minTime));
     }
 
     private void printMaxTaskTime(ArrayList<Task> tasks) {
         Duration maxTime = tasks.get(0).getTotalTime();
-        Task maxTask = tasks.get(0);
         for(Task t: tasks) {
             if(t.getTotalTime().compareTo(maxTime) > 0) {
                 maxTime = t.getTotalTime();
-                maxTask = t;
             }
         }
-        System.out.printf("Maximum Time: %s from task: %s\n", 
-                                formatDuration(maxTime), maxTask.getName());
+        System.out.printf("Maximum Time: %s\n", formatDuration(maxTime));
     }
 
     private Boolean isSizeParameter(String s) {
@@ -110,10 +104,10 @@ public class Summary implements Command{
     }
 
     private static void printTask(Task t) {
-        System.out.printf("Task       : %s\n", t.getName());
-        System.out.printf("Size       : %s\n", t.getSizeString());
-        System.out.printf("Description: %s\n", t.getDescriptionString());
-        System.out.printf("Total Time : %s\n", 
+        System.out.printf("Task        : %s\n", t.getName());
+        System.out.printf("Size        : %s\n", t.getSizeString());
+        System.out.printf("Description : %s\n", t.getDescriptionString());
+        System.out.printf("Total Time  : %s\n", 
                                         formatDuration(t.getTotalTime()));
     }
 
