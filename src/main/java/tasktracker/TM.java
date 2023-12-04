@@ -25,7 +25,7 @@ public class TM
         ArrayList<Task> tasks = new ArrayList<Task>();
         try (Stream<String> stream = 
                             Files.lines(Paths.get("tasktracker.log"))) {
-            stream.forEach(s -> TM.performLogCommand(s,tasks)); 
+            stream.forEach(s -> TM.performLogCommand(s,tasks)); //TODO do check for error/comment in log?
         } catch (Exception e) {
             // TODO: handle exception
         }

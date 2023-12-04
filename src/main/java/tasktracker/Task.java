@@ -3,7 +3,6 @@ package tasktracker;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Optional;
 
 public class Task {
@@ -19,6 +18,7 @@ public class Task {
         this.description = new ArrayList<String>();
         this.runTimes = new ArrayList<Duration>();
         this.mostRecentStartTime = Optional.empty();
+        this.size = Optional.empty();
     }
 
     public String getName() {
@@ -65,28 +65,11 @@ public class Task {
 
     public Duration getTotalTime() {
         if(runTimes.size()==0) {return Duration.ZERO;}
-        Duration total = Duration.ZERO;
+        Duration total = Duration.ofSeconds(0);
         for(Duration d : runTimes) {
-            total.plus(d);
+            total = total.plus(d);
         }
         return total;
-    }
-
-    public Duration getMinTime() {
-        if(runTimes.size()==0) {return Duration.ZERO;}
-        return Collections.min(runTimes);
-    }
-
-    public Duration getMaxTime() {
-        if(runTimes.size()==0) {return Duration.ZERO;}
-        return Collections.min(runTimes);
-    }
-
-    public Duration getAvgTime() {
-        if(runTimes.size()==0) {return Duration.ZERO;}
-        Duration total = getTotalTime();
-        Duration average = total.dividedBy(runTimes.size()); 
-        return average;
     }
 
     public Boolean isRunning() {
