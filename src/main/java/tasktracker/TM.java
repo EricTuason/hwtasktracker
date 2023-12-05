@@ -24,7 +24,6 @@ public class TM
             command.performCommand(args,tasks);
             command.writeCommandToLog(args);
         } catch (Exception e) {
-            System.out.println(e);
             System.out.println("Terminating program execution");
         }
         
@@ -355,7 +354,7 @@ class Rename implements Command{
         for(Task t: tasks) {
             if(t.getName().equals(newName)) {
                 System.out.printf("Error: %s is already a task. "+
-                "Please choose another name", newName);
+                "Please choose another name\n", newName);
                 throw new IllegalArgumentException();
             }
         }
@@ -570,7 +569,7 @@ class Summary implements Command{
     }
 
     @Override
-    public void performCommand(String[] args, ArrayList<Task> tasks) { //TODO write that we assume size then name
+    public void performCommand(String[] args, ArrayList<Task> tasks) {
         if(args.length == 2) { 
             String specifier = args[1];
             tasks = filterBySizeOrName(specifier, tasks);
@@ -664,7 +663,6 @@ class Summary implements Command{
 }
 
 class Task {
-// TODO mention only size and startTime needs to be optional since all others are just empty 
     private String name;
     private Optional<SizeEnum> size; 
     private ArrayList<String> description;
