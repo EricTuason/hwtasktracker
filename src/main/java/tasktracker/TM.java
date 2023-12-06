@@ -284,18 +284,22 @@ class Describe implements Command{
     }
 
     @Override
-    public void alterTasks(String logLine, ArrayList<Task> tasks) { //TODO refactor this method 
-        String[] t = logLine.split("\"");
-        String description = t[1];
-        String[] ti = t[0].split(" ");
-        String name = ti[2];
+    public void alterTasks(String logLine, ArrayList<Task> tasks) {
+        String[] splitByQuotes = logLine.split("\"");
+        String description = splitByQuotes[1];
+        String[] tokenizedInput = splitByQuotes[0].split(" ");
+        String name = tokenizedInput[2];
         createTaskIfNonexistent(name, tasks);
         Task taskToDescribe = getTaskByName(name, tasks);
         taskToDescribe.addToDescription(description);
-        if(ti.length == 4) {
-            String size = ti[3];
+        writeSizeIfPresent(tokenizedInput, taskToDescribe);
+    }
+
+    private void writeSizeIfPresent(String[] tokenizedInput, Task task) {
+        if(tokenizedInput.length == 4) {
+            String size = tokenizedInput[3];
             checkForAllowedSize(size);
-            taskToDescribe.setSize(SizeEnum.valueOf(size));
+            task.setSize(SizeEnum.valueOf(size));
         }
     }
 
@@ -577,17 +581,19 @@ class Summary implements Command{
                 printSummaryStatistics(tasks);
             }
         }
+        System.out.println("--- Start of Summary ---");
         tasks.stream().forEach(Summary::printTask);
+        System.out.println("--- End of Summary ---");
     }
 
     private void printSummaryStatistics(ArrayList<Task> tasks) {
-        System.out.println("--- Start of Summary ---");
+        System.out.println("--- Start of Statistics ---");
         System.out.printf("Summary of %s tasks:\n", 
                                     tasks.get(0).getSizeString());
         printMinTaskTime(tasks);
         printMaxTaskTime(tasks);
         printAvgTaskTime(tasks);
-        System.out.println("--- End of Summary ---");
+        System.out.println("--- End of Statistics ---");
     }
 
     private void printAvgTaskTime(ArrayList<Task> tasks) {
@@ -647,7 +653,7 @@ class Summary implements Command{
     }
 
     private static void printTask(Task t) {
-        System.out.printf("Task        : %s\n", t.getName());
+        System.out.printf("Task Name   : %s\n", t.getName());
         System.out.printf("Size        : %s\n", t.getSizeString());
         System.out.printf("Description : %s\n", t.getDescriptionString());
         System.out.printf("Total Time  : %s\n", 
@@ -702,7 +708,7 @@ class Task {
 
     public String getSizeString() {
         if(!size.isPresent()) {
-            return "Unspecified";
+            return "";
         }
         return size.get().toString();
     }
