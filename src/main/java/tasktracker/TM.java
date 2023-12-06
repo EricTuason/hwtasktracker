@@ -130,14 +130,16 @@ enum SizeEnum {
     }
 }
 
-interface Command {
+abstract class Command {
 
-    void checkForArgumentErrors(String[] args);
-    void performLogCommand(String logLine, ArrayList<Task> tasks);
-    void performCommand(String[] args, ArrayList<Task> tasks);
-    void writeCommandToLog(String[] args) throws IOException;
+    public abstract void checkForArgumentErrors(String[] args);
+    public abstract void performLogCommand(String logLine, 
+                                           ArrayList<Task> tasks);
+    public abstract void performCommand(String[] args, ArrayList<Task> tasks);
+    public abstract void writeCommandToLog(String[] args) throws IOException;
     
-    default void writeToLog(String stringToAddToLog) throws IOException{
+    protected final void writeToLog(String stringToAddToLog)
+                                                         throws IOException{
         FileWriter fw = new FileWriter("tasktracker.log", true);
         try {
             fw.write(stringToAddToLog);
@@ -148,12 +150,12 @@ interface Command {
         }
     }
 
-    default String getTimeString() {
+    protected final String getTimeString() {
         LocalDateTime time = LocalDateTime.now();
         return time.toString();
     }
 
-    default Task getTaskByName(String name, ArrayList<Task> tasks) {
+    protected final Task getTaskByName(String name, ArrayList<Task> tasks) {
         for(Task task: tasks) {
             if(task.getName().equals(name)) {
                 return task;
@@ -163,7 +165,7 @@ interface Command {
         throw new IllegalArgumentException();
     }
 
-    default Boolean doesTaskExist(String name, ArrayList<Task> tasks) {
+    protected final Boolean doesTaskExist(String name, ArrayList<Task> tasks) {
         for(Task task: tasks) {
             if(task.getName().equals(name)) {
                 return true;
@@ -172,15 +174,16 @@ interface Command {
         return false;
     }
 
-    default void createTaskIfNonexistent(String name,ArrayList<Task> tasks) {
+    protected final void createTaskIfNonexistent(
+                                                String name,
+                                                ArrayList<Task> tasks) {
         if(!doesTaskExist(name, tasks)) {
             tasks.add(new Task(name));
         }
     }
 }
 
-class Delete implements Command{
-
+class Delete extends Command{
     @Override
     public void writeCommandToLog(String[] args) throws IOException {
         String taskname = args[1];
@@ -217,8 +220,7 @@ class Delete implements Command{
     }
 }
 
-class Describe implements Command{
-
+class Describe extends Command{
     @Override
     public void writeCommandToLog(String[] args) throws IOException {
         String taskname = args[1];
@@ -317,7 +319,7 @@ class Describe implements Command{
     }
 }
 
-class Rename implements Command{
+class Rename extends Command{
 
     @Override
     public void writeCommandToLog(String[] args) throws IOException {
@@ -374,7 +376,7 @@ class Rename implements Command{
     }
 }
 
-class Size implements Command{
+class Size extends Command{
 
     @Override
     public void writeCommandToLog(String[] args) throws IOException {
@@ -437,7 +439,7 @@ class Size implements Command{
     }
 }
 
-class Start implements Command{
+class Start extends Command{
 
     @Override
     public void writeCommandToLog(String[] args) throws IOException{
@@ -496,7 +498,7 @@ class Start implements Command{
     }
 }
 
-class Stop implements Command{
+class Stop extends Command{
 
     @Override
     public void writeCommandToLog(String[] args) throws IOException{
@@ -551,7 +553,7 @@ class Stop implements Command{
     }
 }
 
-class Summary implements Command{
+class Summary extends Command{
 
     @Override
     public void writeCommandToLog(String[] args) throws IOException {
