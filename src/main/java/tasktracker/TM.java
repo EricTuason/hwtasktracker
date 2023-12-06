@@ -19,7 +19,7 @@ public class TM
     {
         try {
             Command command = Parser.getCommand(args);
-            command.checkForParseErrors(args);
+            command.checkForArgumentErrors(args);
             ArrayList<Task> tasks = createTasksFromLog();
             command.performCommand(args,tasks);
             command.writeCommandToLog(args);
@@ -49,7 +49,7 @@ public class TM
             throw new IllegalArgumentException();
         }
         Command logCommand = Parser.getCommandFromLog(s);
-        logCommand.alterTasks(s, tasks);
+        logCommand.performLogCommand(s, tasks);
     }
 
     private static boolean isNotATimestamp(String string) {
@@ -96,7 +96,7 @@ class Parser {
 
     private static void checkForValidCommand(String command) {
         if(!possibleCommands.contains(command)) {
-            System.out.printf("Illegal Command: %s Possible Commands: ", 
+            System.out.printf("Illegal Command: %s \nPossible Commands: ", 
                                                 command);
             System.out.println(String.join(", ",possibleCommands));
             throw new IllegalArgumentException();
@@ -132,11 +132,11 @@ enum SizeEnum {
 
 interface Command {
 
-    void writeCommandToLog(String[] args) throws IOException;
-    void checkForParseErrors(String[] args);
-    void alterTasks(String logLine, ArrayList<Task> tasks);
+    void checkForArgumentErrors(String[] args);
+    void performLogCommand(String logLine, ArrayList<Task> tasks);
     void performCommand(String[] args, ArrayList<Task> tasks);
-
+    void writeCommandToLog(String[] args) throws IOException;
+    
     default void writeToLog(String stringToAddToLog) throws IOException{
         FileWriter fw = new FileWriter("tasktracker.log", true);
         try {
@@ -190,7 +190,7 @@ class Delete implements Command{
     }
 
     @Override
-    public void checkForParseErrors(String[] args) {
+    public void checkForArgumentErrors(String[] args) {
         checkForValidNumberOfArguments(args);
     }
     
@@ -202,7 +202,7 @@ class Delete implements Command{
     }
 
     @Override
-    public void alterTasks(String logLine, ArrayList<Task> tasks) {
+    public void performLogCommand(String logLine, ArrayList<Task> tasks) {
         String[] tokenizedByDelete = logLine.split(" ");
         String name = tokenizedByDelete[2];
         Task taskToDelete = getTaskByName(name, tasks);
@@ -253,7 +253,7 @@ class Describe implements Command{
     }
 
     @Override
-    public void checkForParseErrors(String[] args) {
+    public void checkForArgumentErrors(String[] args) {
         checkForValidNumberOfArguments(args);
         if(args.length == 4) {
             String size = args[3];
@@ -284,7 +284,7 @@ class Describe implements Command{
     }
 
     @Override
-    public void alterTasks(String logLine, ArrayList<Task> tasks) {
+    public void performLogCommand(String logLine, ArrayList<Task> tasks) {
         String[] splitByQuotes = logLine.split("\"");
         String description = splitByQuotes[1];
         String[] tokenizedInput = splitByQuotes[0].split(" ");
@@ -330,7 +330,7 @@ class Rename implements Command{
     }
 
     @Override
-    public void checkForParseErrors(String[] args) {
+    public void checkForArgumentErrors(String[] args) {
         checkForValidNumberOfArguments(args);
     }
 
@@ -344,7 +344,7 @@ class Rename implements Command{
     }
 
     @Override
-    public void alterTasks(String logLine, ArrayList<Task> tasks) {
+    public void performLogCommand(String logLine, ArrayList<Task> tasks) {
         String[] tokenizedByRename = logLine.split(" ");
         String oldName = tokenizedByRename[2];
         String newName = tokenizedByRename[3];
@@ -387,7 +387,7 @@ class Size implements Command{
     }
 
     @Override
-    public void checkForParseErrors(String[] args) {
+    public void checkForArgumentErrors(String[] args) {
         checkForValidNumberOfArguments(args);
         String size = args[2];
         checkForAllowedSize(size);
@@ -415,7 +415,7 @@ class Size implements Command{
     }
 
     @Override
-    public void alterTasks(String logLine, ArrayList<Task> tasks) {
+    public void performLogCommand(String logLine, ArrayList<Task> tasks) {
         String[] tokenizedByStart = logLine.split(" ");
         String name = tokenizedByStart[2];
         String size = tokenizedByStart[3];
@@ -448,7 +448,7 @@ class Start implements Command{
     }
 
     @Override
-    public void checkForParseErrors(String[] args) {
+    public void checkForArgumentErrors(String[] args) {
         checkForValidNumberOfArguments(args);
     }
 
@@ -472,7 +472,7 @@ class Start implements Command{
     }
 
     @Override
-    public void alterTasks(String logLine, ArrayList<Task> tasks) {
+    public void performLogCommand(String logLine, ArrayList<Task> tasks) {
         String[] tokenizedByStart = logLine.split(" ");
         LocalDateTime startTime = LocalDateTime.parse(tokenizedByStart[0]);
         String name = tokenizedByStart[2];
@@ -507,7 +507,7 @@ class Stop implements Command{
     }
 
     @Override
-    public void checkForParseErrors(String[] args) {
+    public void checkForArgumentErrors(String[] args) {
         checkForValidNumberOfArguments(args);
     }
 
@@ -528,7 +528,7 @@ class Stop implements Command{
     }
 
     @Override
-    public void alterTasks(String logLine, ArrayList<Task> tasks) {
+    public void performLogCommand(String logLine, ArrayList<Task> tasks) {
         String[] tokenizedByStop = logLine.split(" ");
         LocalDateTime stopTime = LocalDateTime.parse(tokenizedByStop[0]);
         String name = tokenizedByStop[2];
@@ -559,7 +559,7 @@ class Summary implements Command{
     }
 
     @Override
-    public void checkForParseErrors(String[] args) {
+    public void checkForArgumentErrors(String[] args) {
         if(args.length > 2) {
             System.out.println("Error: Incorrect number of arguments.");
             System.out.println("Usage: summary [<task name> | {S|M|L|XL}]");
@@ -568,7 +568,7 @@ class Summary implements Command{
     }
 
     @Override
-    public void alterTasks(String logLine, ArrayList<Task> tasks) {
+    public void performLogCommand(String logLine, ArrayList<Task> tasks) {
         return;
     }
 
