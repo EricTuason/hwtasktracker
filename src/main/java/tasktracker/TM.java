@@ -194,10 +194,6 @@ class Delete extends Command{
 
     @Override
     public void checkForArgumentErrors(String[] args) {
-        checkForValidNumberOfArguments(args);
-    }
-    
-    private void checkForValidNumberOfArguments(String[] args){
         if(args.length != 2) {
             System.out.println("Usage: java TM.java delete <task name>");
             throw new IllegalArgumentException();
@@ -333,10 +329,6 @@ class Rename extends Command{
 
     @Override
     public void checkForArgumentErrors(String[] args) {
-        checkForValidNumberOfArguments(args);
-    }
-
-    private void checkForValidNumberOfArguments(String[] args) {
         if(args.length != 3) {
             System.out.println(
                 "Error: incorrect number of arguments\n" +
@@ -451,10 +443,6 @@ class Start extends Command{
 
     @Override
     public void checkForArgumentErrors(String[] args) {
-        checkForValidNumberOfArguments(args);
-    }
-
-    private void checkForValidNumberOfArguments(String[] args) {
         if(args.length != 2) {
             System.out.println("Usage: java TM.java start <task name>");
             throw new IllegalArgumentException();
@@ -510,19 +498,6 @@ class Stop extends Command{
 
     @Override
     public void checkForArgumentErrors(String[] args) {
-        checkForValidNumberOfArguments(args);
-    }
-
-    private void ensureTaskExistsAndWasStarted(
-                                String name, ArrayList<Task> tasks) {
-        Task task = getTaskByName(name, tasks);
-        if(!task.isRunning()) {
-            System.out.printf("Error: task %s is not running\n",name);
-            throw new IllegalArgumentException();
-        }
-    }
-
-    private void checkForValidNumberOfArguments(String[] args) {
         if(args.length != 2) {
             System.out.println("Usage: java TM.java stop <task name>");
             throw new IllegalArgumentException();
@@ -543,7 +518,16 @@ class Stop extends Command{
             Task task = getTaskByName(name, tasks);
             task.stop(stopTime);
     }
-
+    
+    private void ensureTaskExistsAndWasStarted(
+                                String name, ArrayList<Task> tasks) {
+        Task task = getTaskByName(name, tasks);
+        if(!task.isRunning()) {
+            System.out.printf("Error: task %s is not running\n",name);
+            throw new IllegalArgumentException();
+        }
+    }
+    
     @Override
     public void performCommand(String[] args, ArrayList<Task> tasks) {
         String name = args[1];
