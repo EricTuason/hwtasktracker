@@ -4,7 +4,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Optional;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -63,27 +62,15 @@ public class TM
 }
 
 class Parser {
-    private static ArrayList<String> possibleCommands = 
-    new ArrayList<String>(Arrays.asList(
-        "start",
-        "stop",
-        "size",
-        "rename",
-        "delete",
-        "describe",
-        "summary"
-        ));
 
     public static Command getCommand(String[] commandToCheck) 
                         throws IllegalArgumentException {
         checkInputForNull(commandToCheck);
-        checkForValidCommand(commandToCheck[0]);
         Command command = getCommandInstance(commandToCheck[0]);
         return command;
     }
 
     private static Command getCommandInstance(String commandName) {
-        checkForValidCommand(commandName);
         if(commandName.equals("start")) {return new Start();}
         if(commandName.equals("stop")) {return new Stop();}
         if(commandName.equals("size")) {return new Size();}
@@ -91,16 +78,8 @@ class Parser {
         if(commandName.equals("delete")) {return new Delete();}
         if(commandName.equals("describe")) {return new Describe();}
         if(commandName.equals("summary")) {return new Summary();}
+        System.out.printf("Error: Illegal Command: %s\n", commandName);
         throw new IllegalArgumentException();
-    }
-
-    private static void checkForValidCommand(String command) {
-        if(!possibleCommands.contains(command)) {
-            System.out.printf("Illegal Command: %s \nPossible Commands: ", 
-                                                command);
-            System.out.println(String.join(", ",possibleCommands));
-            throw new IllegalArgumentException();
-        }
     }
 
     private static void checkInputForNull(String[] args) 
@@ -178,6 +157,11 @@ abstract class Command {
                                                 String name,
                                                 ArrayList<Task> tasks) {
         if(!doesTaskExist(name, tasks)) {
+            if(SizeEnum.nameString().contains(name)) 
+            {
+                System.out.println("Error: task name cannot be a Size");
+                throw new IllegalArgumentException();
+            }
             tasks.add(new Task(name));
         }
     }
@@ -527,7 +511,7 @@ class Stop extends Command{
             throw new IllegalArgumentException();
         }
     }
-    
+
     @Override
     public void performCommand(String[] args, ArrayList<Task> tasks) {
         String name = args[1];
