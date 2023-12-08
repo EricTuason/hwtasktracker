@@ -32,7 +32,7 @@ public class TM
         ArrayList<Task> tasks = new ArrayList<Task>();
         try (Stream<String> stream = 
                             Files.lines(Paths.get("tasktracker.log"))) {
-            stream.forEach(s -> TM.performLogCommand(s,tasks)); 
+            stream.forEachOrdered(s -> TM.performLogCommand(s,tasks)); 
         } catch (NoSuchFileException e) {
             return new ArrayList<Task>();
         } catch (Exception e) {
@@ -560,7 +560,7 @@ class Summary extends Command{
             return;
         }
         System.out.println("--- Start of Summary ---");
-        tasks.stream().forEach(Summary::printTask);
+        tasks.stream().forEachOrdered(Summary::printTask);
         System.out.println("---- End of Summary ----");
     }
 
