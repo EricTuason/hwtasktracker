@@ -1,6 +1,6 @@
 #! /bin/bash
 
-rm tasktracker.log
+rm -f tasktracker.log
 java TM.java size Task S
 java TM.java size Task2 M
 java TM.java size Task3 L

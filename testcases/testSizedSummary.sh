@@ -1,6 +1,6 @@
 #! /bin/bash
 
-rm tasktracker.log
+rm -f tasktracker.log
 java TM.java start TaskA
 sleep 1
 java TM.java stop TaskA

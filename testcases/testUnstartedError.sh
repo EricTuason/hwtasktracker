@@ -1,4 +1,4 @@
 #! /bin/bash
 
-rm tasktracker.log
+rm -f tasktracker.log
 java TM.java stop Task1

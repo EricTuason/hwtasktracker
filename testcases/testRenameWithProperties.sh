@@ -1,6 +1,6 @@
 #! /bin/bash
 
-rm tasktracker.log
+rm -f tasktracker.log
 java TM.java start TaskA
 java TM.java describe TaskA "This task will be named Task1" XL
 java TM.java rename TaskA Task1
