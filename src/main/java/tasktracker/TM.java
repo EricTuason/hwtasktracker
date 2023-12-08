@@ -643,13 +643,13 @@ class Task {
     private Optional<SizeEnum> size; 
     private ArrayList<String> description;
     private ArrayList<Duration> runTimes;
-    private Optional<LocalDateTime> mostRecentStartTime;
+    private Optional<LocalDateTime> currentStartTime;
 
     public Task(String name) {
         this.name = name;
         this.description = new ArrayList<String>();
         this.runTimes = new ArrayList<Duration>();
-        this.mostRecentStartTime = Optional.empty();
+        this.currentStartTime = Optional.empty();
         this.size = Optional.empty();
     }
 
@@ -658,18 +658,18 @@ class Task {
     }
 
     public void start(LocalDateTime t) {
-        mostRecentStartTime = Optional.of(t);
+        currentStartTime = Optional.of(t);
     }
 
     public void stop(LocalDateTime t) {
-        Duration runTime = Duration.between(mostRecentStartTime.get(), t);
+        Duration runTime = Duration.between(currentStartTime.get(), t);
         if(runTime.isNegative()) {
             System.out.printf(
                 "Error: End time %s is before start time %s for task %s\n", 
-                mostRecentStartTime.toString() , t.toString(), name);
+                currentStartTime.toString() , t.toString(), name);
         }
         runTimes.add(runTime);
-        mostRecentStartTime = Optional.empty();
+        currentStartTime = Optional.empty();
     }
 
     public void setSize(SizeEnum size) {
@@ -705,7 +705,7 @@ class Task {
     }
 
     public Boolean isRunning() {
-        if(mostRecentStartTime.isPresent()) {
+        if(currentStartTime.isPresent()) {
             return true;
         }
         return false;
