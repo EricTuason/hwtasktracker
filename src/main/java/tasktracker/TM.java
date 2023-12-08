@@ -43,21 +43,9 @@ public class TM
     }
 
     private static void performLogCommand(String s, ArrayList<Task> tasks) {
-        if(isNotATimestamp(s.split(" ")[0])) {
-            System.out.println("Error: Noncommand line found in log file");
-            throw new IllegalArgumentException();
-        }
+        Parser.checkLogCommandValidity(s);
         Command logCommand = Parser.getCommandFromLog(s);
         logCommand.performLogCommand(s, tasks);
-    }
-
-    private static boolean isNotATimestamp(String string) {
-        try {
-            LocalDateTime.parse(string);
-            return false;
-        } catch (DateTimeParseException e) {
-            return true;
-        }
     }
 }
 
@@ -68,6 +56,22 @@ class Parser {
         checkInputForNull(commandToCheck);
         Command command = getCommandInstance(commandToCheck[0]);
         return command;
+    }
+
+    public static void checkLogCommandValidity(String s) {
+        if(isNotATimestamp(s.split(" ")[0])) {
+            System.out.println("Error: Noncommand line found in log file");
+            throw new IllegalArgumentException();
+        }
+    }
+
+    private static boolean isNotATimestamp(String string) {
+        try {
+            LocalDateTime.parse(string);
+            return false;
+        } catch (DateTimeParseException e) {
+            return true;
+        }
     }
 
     private static Command getCommandInstance(String commandName) {
