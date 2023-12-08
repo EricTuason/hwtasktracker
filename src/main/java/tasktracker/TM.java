@@ -551,9 +551,17 @@ class Summary extends Command{
                 printSummaryStatistics(tasks);
             }
         }
+        printSummary(tasks);
+    }
+
+    private void printSummary(ArrayList<Task> tasks) {
+        if(tasks.size() == 0) {
+            System.out.println("No tasks to print.");
+            return;
+        }
         System.out.println("--- Start of Summary ---");
         tasks.stream().forEach(Summary::printTask);
-        System.out.println("--- End of Summary ---");
+        System.out.println("---- End of Summary ----");
     }
 
     private void printSummaryStatistics(ArrayList<Task> tasks) {
@@ -563,7 +571,7 @@ class Summary extends Command{
         printMinTaskTime(tasks);
         printMaxTaskTime(tasks);
         printAvgTaskTime(tasks);
-        System.out.println("--- End of Statistics ---");
+        System.out.println("---- End of Statistics ----");
     }
 
     private void printAvgTaskTime(ArrayList<Task> tasks) {
