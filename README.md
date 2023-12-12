@@ -1,6 +1,6 @@
 # hwtasktracker
 This project keeps track of time spent on individual tasks. Tasks can be described and given "T-shirt" sizes. 
-To use, download TM.java and use Java's single source executable to run.
+To use, download TM.java and use Java's single source executable to run. TM.java can be found in src/main/java/tasktracker.
 The program generates the file tasktracker.log as storage for this program.
 Usage: `java TM.java <command> <data>`.
 
